@@ -1,0 +1,60 @@
+.container {
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.matrix {
+  background-color: #bbada2;
+  width: 408px;
+  height: 408px;
+  margin: 0 auto;
+  position: relative;
+
+  .matrix_item {
+    font-family: verdana;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #cfc1b5;
+    width: calc(25% - 4px);
+    height: calc(25% - 4px);
+    margin: 2px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition:left 1s linear;
+  }
+
+  .matrix_item__2 {
+    background-color: #eee4dc;
+  }
+
+  .matrix_item__4 {
+    background-color: #ece0c9;
+  }
+
+  .matrix_item__8 {
+    background-color: #efb17b;
+  }
+
+  .matrix_item__16 {
+    background-color: #f49664;
+  }
+
+  .matrix_item__32 {
+    background-color: #f57c60;
+  }
+
+  .matrix_item__64 {
+    background-color: #eee4dc;
+  }
+
+  .matrix_item__128 {
+    background-color: #eee4dc;
+  }
+
+}
