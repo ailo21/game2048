@@ -91,9 +91,8 @@ const Game2048 = () => {
 
     const newGame = () => {
         setMatrix(matrixDef);
-        setStepCount(0);
+        setStepCount(1);
 
-        // generateSquare();
     }
 
     useEffect(() => {
