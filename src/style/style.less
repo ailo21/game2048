@@ -1,6 +1,32 @@
 .container {
   margin: 0 auto;
   max-width: 900px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input#InputTool {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: 0;
+  opacity: 0;
+}
+
+.matrix_wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.matrix_tools {
+  max-width: 408px;
+  margin: 30px auto;
 }
 
 .matrix {
@@ -26,7 +52,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    transition:left 1s linear;
+    transition: left 1s linear;
   }
 
   .matrix_item__2 {
@@ -46,15 +72,32 @@
   }
 
   .matrix_item__32 {
-    background-color: #f57c60;
+    background-color: #f57c61;
   }
 
   .matrix_item__64 {
-    background-color: #eee4dc;
+    background-color: #f55d3c;
   }
 
   .matrix_item__128 {
-    background-color: #eee4dc;
+    background-color: #edce72;
+  }
+
+  .matrix_item__256 {
+    background-color: indianred;
+  }
+
+  .matrix_item__512 {
+    background-color: darkgray;
+  }
+
+  .matrix_item__1024 {
+    background-color: darkolivegreen;
+  }
+
+  .matrix_item__2048 {
+    background-color: black;
+    color: #fff;
   }
 
 }

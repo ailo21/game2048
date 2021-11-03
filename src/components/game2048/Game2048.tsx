@@ -2,24 +2,20 @@ import React, {useEffect, useState} from 'react';
 import SquareItem from "./SquareItem";
 import {ArrowEnum} from "../../type/ArrowEnum";
 import {Input} from 'antd'
-import internal from "stream";
+import {ItemSquare} from "../../type/ItemSquare";
+import {moveLeft, moveRight, rotate} from "../../util/arrayTools";
+import { Button } from 'antd';
 
-
-interface ItemSquare {
-    x: number;
-    y: number;
-    val: number;
-}
 
 const Game2048 = () => {
     const matrixDef: ItemSquare[][] = [
         [{x: 0, y: 0, val: 0}, {x: 1, y: 0, val: 0}, {x: 2, y: 0, val: 0}, {x: 3, y: 0, val: 0}],
-        [{x: 0, y: 1, val: 2}, {x: 1, y: 1, val: 2}, {x: 2, y: 1, val: 0}, {x: 3, y: 1, val: 0}],
+        [{x: 0, y: 1, val: 0}, {x: 1, y: 1, val: 0}, {x: 2, y: 1, val: 0}, {x: 3, y: 1, val: 0}],
         [{x: 0, y: 2, val: 0}, {x: 1, y: 2, val: 0}, {x: 2, y: 2, val: 0}, {x: 3, y: 2, val: 0}],
         [{x: 0, y: 3, val: 0}, {x: 1, y: 3, val: 0}, {x: 2, y: 3, val: 0}, {x: 3, y: 3, val: 0}],
     ];
     const [matrix, setMatrix] = useState(matrixDef);
-    const [point, setPoint] = useState<number>(0);
+    const [stepCount, setStepCount] = useState<number>(0);
     const inputEl = React.useRef(null);
 
     function handleKeyPress(event: React.KeyboardEvent): any {
@@ -28,7 +24,7 @@ const Game2048 = () => {
             || event.code === ArrowEnum.ArrowDown
             || event.code === ArrowEnum.ArrowLeft
         ) {
-            setPoint(point + 1);
+            setStepCount(stepCount + 1);
             actionStep(event.code);
         }
     }
@@ -36,73 +32,33 @@ const Game2048 = () => {
     const actionStep = (action: ArrowEnum) => {
 
         if (action === ArrowEnum.ArrowLeft) {
+            setMatrix(moveLeft(matrix));
+        } else if (action == ArrowEnum.ArrowRight) {
 
-            setMatrix(matrix.map((row) => {
-                let startArray: number[] = [];
-                let endArray: number[] = [];
-                row.forEach(col => {
-                    if (col.val > 0) {
-                        startArray.push(col.val);
-                    } else {
-                        endArray.push(0);
-                    }
-                })
-                let tempArr = startArray.concat(endArray);
-                let sumTempArr: number[] = [];
+            setMatrix(moveRight(matrix));
+        } else if (action == ArrowEnum.ArrowDown) {
+            rotate(matrix);
 
-                for (let i = 0; i < tempArr.length; i++) {
-                    if (tempArr[i + 1] !== undefined && tempArr[i] == tempArr[i + 1]) {
-                        sumTempArr.push(tempArr[i] + tempArr[i + 1])
-                    } else {
-                        sumTempArr.push(tempArr[i])
-                    }
-                }
-                while (sumTempArr.length < tempArr.length) {
-                    sumTempArr.push(0);
-                }
+            let newArray =moveLeft(matrix);
 
-                return row.map((r, i) => {
-                    r.val = sumTempArr[i];
-                    return r;
-                })
-            }));
+            rotate(newArray);
+            rotate(newArray);
+            rotate(newArray);
+            setMatrix(newArray)
+
+        } else if (action == ArrowEnum.ArrowUp) {
+
+            rotate(matrix);
+
+            let newArray =moveRight(matrix);
+
+            rotate(newArray);
+            rotate(newArray);
+            rotate(newArray);
+            setMatrix(newArray)
+
         }
-        if (action == ArrowEnum.ArrowRight) {
 
-            setMatrix(matrix.map((row) => {
-                let startArray: number[] = [];
-                let endArray: number[] = [];
-                row.forEach(col => {
-                    if (col.val > 0) {
-                        endArray.push(col.val);
-                    } else {
-                        startArray.push(0);
-                    }
-                })
-                let tempArr = startArray.concat(endArray);
-                const tempArrReverse = tempArr.reverse();
-                let tempArrSum: number[] = [];
-
-                for (let i = 0; i < tempArrReverse.length; i++) {
-                    if (tempArrReverse[i + 1] !== undefined && tempArrReverse[i] == tempArrReverse[i + 1]) {
-                        tempArrSum.push(tempArrReverse[i] + tempArrReverse[i + 1]);
-                        i++;
-                    } else {
-                        tempArrSum.push(tempArrReverse[i]);
-                    }
-                }
-                while (tempArrSum.length < tempArrReverse.length) {
-                    tempArrSum.push(0);
-                }
-                tempArr = tempArrSum.reverse();
-
-
-                return row.map((r, i) => {
-                    r.val = tempArr[i];
-                    return r;
-                })
-            }));
-        }
     }
 
     function getRandomInRange(min: number, max: number) {
@@ -119,7 +75,7 @@ const Game2048 = () => {
         }))
         if (emptySquareCount < 1) {
             alert('Game over');
-            window.location.reload();
+            setMatrix(matrixDef);
         }
 
         const squareVariant = [2, 2, 2, 4];
@@ -132,20 +88,41 @@ const Game2048 = () => {
         matrix[point.x][point.y].val = squareVal;
         setMatrix([...matrix]);
     }
+
+    const newGame = () => {
+        setMatrix(matrixDef);
+        setStepCount(0);
+
+        // generateSquare();
+    }
+
     useEffect(() => {
         generateSquare();
-    }, [point]);
+    }, []);
+    useEffect(() => {
+        generateSquare();
+    }, [stepCount]);
+
     return (
         <div className={"container"}>
             <Input id={"InputTool"} ref={inputEl} autoFocus onKeyUp={handleKeyPress} type={"text"}/>
-            <div className={"matrix"}>
-                {matrix.map((row, index) => {
-                    return row.map((col, index2) => {
-                            return <SquareItem key={`${index}${index2}`} col={col}/>
-                        }
-                    )
-                })}
+            <div className={"matrix_wrap"}>
+                <div className={"matrix"}>
+                    {matrix.map((row, index) => {
+                        return row.map((col, index2) => {
+                                return <SquareItem key={`${index}${index2}`} col={col}/>
+                            }
+                        )
+                    })}
+                </div>
+                <div className={"matrix_tools"}>
+                    <Button block onClick={newGame}>
+                        Новая игра
+                    </Button>
+                </div>
             </div>
+
+
         </div>
 
     );
