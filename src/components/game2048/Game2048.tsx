@@ -3,16 +3,28 @@ import SquareItem from "./SquareItem";
 import {ArrowEnum} from "../../type/ArrowEnum";
 import {Input} from 'antd'
 import {ItemSquare} from "../../type/ItemSquare";
-import {moveLeft, moveRight, rotate} from "../../util/arrayTools";
-import { Button } from 'antd';
+import {moveLeft,moveRight} from "../../util/arrayTools";
+import {Button} from 'antd';
 
 
 const Game2048 = () => {
-    const matrixDef: ItemSquare[][] = [
-        [{x: 0, y: 0, val: 0}, {x: 1, y: 0, val: 0}, {x: 2, y: 0, val: 0}, {x: 3, y: 0, val: 0}],
-        [{x: 0, y: 1, val: 0}, {x: 1, y: 1, val: 0}, {x: 2, y: 1, val: 0}, {x: 3, y: 1, val: 0}],
-        [{x: 0, y: 2, val: 0}, {x: 1, y: 2, val: 0}, {x: 2, y: 2, val: 0}, {x: 3, y: 2, val: 0}],
-        [{x: 0, y: 3, val: 0}, {x: 1, y: 3, val: 0}, {x: 2, y: 3, val: 0}, {x: 3, y: 3, val: 0}],
+    const matrixDef: ItemSquare[] = [
+        {index: 0, val: 0},
+        {index: 1, val: 0},
+        {index: 2, val: 0},
+        {index: 3, val: 0},
+        {index: 4, val: 0},
+        {index: 5, val: 0},
+        {index: 6, val: 0},
+        {index: 7, val: 0},
+        {index: 8, val: 0},
+        {index: 9, val: 0},
+        {index: 10, val: 0},
+        {index: 11, val: 0},
+        {index: 12, val: 0},
+        {index: 13, val: 0},
+        {index: 14, val: 0},
+        {index: 15, val: 0}
     ];
     const [matrix, setMatrix] = useState(matrixDef);
     const [stepCount, setStepCount] = useState<number>(0);
@@ -32,30 +44,29 @@ const Game2048 = () => {
     const actionStep = (action: ArrowEnum) => {
 
         if (action === ArrowEnum.ArrowLeft) {
-            setMatrix(moveLeft(matrix));
+             setMatrix(moveLeft(matrix));
         } else if (action == ArrowEnum.ArrowRight) {
-
-            setMatrix(moveRight(matrix));
+             setMatrix(moveRight(matrix));
         } else if (action == ArrowEnum.ArrowDown) {
-            rotate(matrix);
-
-            let newArray =moveLeft(matrix);
-
-            rotate(newArray);
-            rotate(newArray);
-            rotate(newArray);
-            setMatrix(newArray)
+            // rotate(matrix);
+            //
+            // let newArray =moveLeft(matrix);
+            //
+            // rotate(newArray);
+            // rotate(newArray);
+            // rotate(newArray);
+            // setMatrix(newArray)
 
         } else if (action == ArrowEnum.ArrowUp) {
 
-            rotate(matrix);
-
-            let newArray =moveRight(matrix);
-
-            rotate(newArray);
-            rotate(newArray);
-            rotate(newArray);
-            setMatrix(newArray)
+            // rotate(matrix);
+            //
+            // let newArray =moveRight(matrix);
+            //
+            // rotate(newArray);
+            // rotate(newArray);
+            // rotate(newArray);
+            // setMatrix(newArray)
 
         }
 
@@ -66,27 +77,21 @@ const Game2048 = () => {
     }
 
     const generateSquare = () => {
-        //определим кол-во оставшихся пустых клеток
-        let emptySquareCount: number = 0;
-        matrix.forEach(row => row.map(col => {
-            if (col.val < 1) {
-                emptySquareCount++;
-            }
-        }))
-        if (emptySquareCount < 1) {
-            alert('Game over');
-            setMatrix(matrixDef);
-        }
-
         const squareVariant = [2, 2, 2, 4];
         const squareVal = squareVariant[Math.floor(Math.random() * squareVariant.length)];
-        let point: ItemSquare = {x: 0, y: 0, val: 0};
+        let tempIndex: number;
         do {
-            point.x = getRandomInRange(0, 3);
-            point.y = getRandomInRange(0, 3);
-        } while (!(matrix[point.x][point.y].val == 0))
-        matrix[point.x][point.y].val = squareVal;
-        setMatrix([...matrix]);
+            tempIndex = getRandomInRange(0, 15)
+        } while (!(matrix.find((item) => item.index === tempIndex)?.val === 0))
+
+        setMatrix(matrix.map(o=>{
+            if(o.index==tempIndex){
+                o.val=squareVal;
+                return o;
+            }
+            return o;
+        }));
+
     }
 
     const newGame = () => {
@@ -98,9 +103,9 @@ const Game2048 = () => {
     useEffect(() => {
         generateSquare();
     }, []);
-    useEffect(() => {
-        generateSquare();
-    }, [stepCount]);
+    // useEffect(() => {
+    //     generateSquare();
+    // }, [stepCount]);
 
     return (
         <div className={"container"}>
@@ -108,10 +113,7 @@ const Game2048 = () => {
             <div className={"matrix_wrap"}>
                 <div className={"matrix"}>
                     {matrix.map((row, index) => {
-                        return row.map((col, index2) => {
-                                return <SquareItem key={`${index}${index2}`} col={col}/>
-                            }
-                        )
+                        return <SquareItem key={`${row.index}`} num={index} square={row}/>
                     })}
                 </div>
                 <div className={"matrix_tools"}>
