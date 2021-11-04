@@ -1,84 +1,61 @@
 import {ItemSquare} from "../type/ItemSquare";
 
-export const rotate = (matrix: ItemSquare[][]) => {
-    const n = matrix.length;
-    const x = Math.floor(n / 2);
-    const y = n - 1;
-    for (let i = 0; i < x; i++) {
-        for (let j = i; j < y - i; j++) {
-            const k = matrix[i][j];
-            matrix[i][j] = matrix[y - j][i];
-            matrix[y - j][i] = matrix[y - i][y - j];
-            matrix[y - i][y - j] = matrix[j][y - i]
-            matrix[j][y - i] = k
-        }
+// export const rotate = (matrix: ItemSquare[][]) => {
+//     const n = matrix.length;
+//     const x = Math.floor(n / 2);
+//     const y = n - 1;
+//     for (let i = 0; i < x; i++) {
+//         for (let j = i; j < y - i; j++) {
+//             const k = matrix[i][j];
+//             matrix[i][j] = matrix[y - j][i];
+//             matrix[y - j][i] = matrix[y - i][y - j];
+//             matrix[y - i][y - j] = matrix[j][y - i]
+//             matrix[j][y - i] = k
+//         }
+//     }
+//     return matrix;
+// }
+export const moveLeft = (matrix: ItemSquare[]) => {
+    let size = 4;
+    let subarray = []; //массив в который будет выведен результат.
+    for (let i = 0; i < Math.ceil(matrix.length / size); i++) {
+        subarray[i] = matrix.slice((i * size), (i * size) + size);
     }
-    return matrix;
-}
-export const moveLeft = (matrix: ItemSquare[][]) => {
-    return matrix.map((row) => {
-        let startArray: number[] = [];
-        let endArray: number[] = [];
-        row.forEach(col => {
-            if (col.val > 0) {
-                startArray.push(col.val);
+
+    let newArray = [] as ItemSquare[];
+    subarray.forEach(s => {
+        const startArray: ItemSquare[] = [];
+        const endArray: ItemSquare[] = [];
+        s.forEach((square) => {
+            if (square.val > 0) {
+                startArray.push(square);
             } else {
-                endArray.push(0);
+                endArray.push(square);
             }
         })
-        let tempArr = startArray.concat(endArray);
-        let sumTempArr: number[] = [];
-
-        for (let i = 0; i < tempArr.length; i++) {
-            if (tempArr[i + 1] !== undefined && tempArr[i] == tempArr[i + 1]) {
-                sumTempArr.push(tempArr[i] + tempArr[i + 1]);
-                i++;
-            } else {
-                sumTempArr.push(tempArr[i])
-            }
-        }
-        while (sumTempArr.length < tempArr.length) {
-            sumTempArr.push(0);
-        }
-
-        return row.map((r, i) => {
-            r.val = sumTempArr[i];
-            return r;
-        })
+        newArray=newArray.concat(startArray.concat(endArray))
     })
+    return newArray;
 }
-export const moveRight = (matrix: ItemSquare[][]) => {
-    return matrix.map((row) => {
-        let startArray: number[] = [];
-        let endArray: number[] = [];
-        row.forEach(col => {
-            if (col.val > 0) {
-                endArray.push(col.val);
+export const moveRight = (matrix: ItemSquare[]) => {
+    let size = 4;
+    let subarray = []; //массив в который будет выведен результат.
+    for (let i = 0; i < Math.ceil(matrix.length / size); i++) {
+        subarray[i] = matrix.slice((i * size), (i * size) + size);
+    }
+
+    let newArray = [] as ItemSquare[];
+    subarray.forEach(s => {
+        const startArray: ItemSquare[] = [];
+        const endArray: ItemSquare[] = [];
+        s.forEach((square) => {
+            if (square.val > 0) {
+                endArray.push(square);
             } else {
-                startArray.push(0);
+                startArray.push(square);
             }
         })
-        let tempArr = startArray.concat(endArray);
-        const tempArrReverse = tempArr.reverse();
-        let tempArrSum: number[] = [];
-
-        for (let i = 0; i < tempArrReverse.length; i++) {
-            if (tempArrReverse[i + 1] !== undefined && tempArrReverse[i] == tempArrReverse[i + 1]) {
-                tempArrSum.push(tempArrReverse[i] + tempArrReverse[i + 1]);
-                i++;
-            } else {
-                tempArrSum.push(tempArrReverse[i]);
-            }
-        }
-        while (tempArrSum.length < tempArrReverse.length) {
-            tempArrSum.push(0);
-        }
-        tempArr = tempArrSum.reverse();
-
-
-        return row.map((r, i) => {
-            r.val = tempArr[i];
-            return r;
-        })
+        newArray=newArray.concat(startArray.concat(endArray))
     })
+    return newArray;
 }
