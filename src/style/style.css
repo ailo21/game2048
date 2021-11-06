@@ -32,6 +32,9 @@ input#InputTool {
   margin: 0 auto;
   position: relative;
 }
+.matrix .matrix_opacity {
+  opacity: 0;
+}
 .matrix .matrix_item {
   font-family: verdana;
   font-size: 1.2em;
@@ -44,7 +47,7 @@ input#InputTool {
   justify-content: center;
   align-items: center;
   position: absolute;
-  transition: left 0.2s linear;
+  transition: left 0.3s linear;
 }
 .matrix .matrix_item__2 {
   background-color: #eee4dc;

@@ -2,8 +2,7 @@ import React, {FC} from 'react';
 import {ItemSquare} from "../../type/ItemSquare";
 
 interface OperationBtnProps {
-    square: ItemSquare,
-    num: number
+    square: ItemSquare
 }
 
 interface coordinate {
@@ -72,18 +71,17 @@ const defineSpec = (num: number): coordinate => {
     return coordinate;
 }
 
-const SquareItem: FC<OperationBtnProps> = ({square, num}) => {
+const SquareItem: FC<OperationBtnProps> = ({square}) => {
 
-    const coordinate:coordinate = defineSpec(num)
-    if(square.val > 0){
-        return <div
-            className={`matrix_item matrix_item__${square.val}`}
-            style={{left: `${coordinate.x}%`, top: `${coordinate.y}%,`,right:'0%'}}
-        >
-            <span>{square.val > 0 ? square.val : ''}</span>
-        </div>
-    }
-    else return <div className={"matrix_empty"}></div>
+    const coordinate:coordinate = defineSpec(square.indexNum)
+
+    return <div
+        className={`matrix_item matrix_item__${square.val}${square.val<1?" matrix_opacity":""}`}
+        style={{left: `${coordinate.x}%`, top: `${coordinate.y}%`}}
+    >
+        <span>{square.val}</span>
+        {/*<span>{square.val > 0 ? square.val : square.index}</span>*/}
+    </div>
 };
 
 export default SquareItem;

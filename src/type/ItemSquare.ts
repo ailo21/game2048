@@ -1,4 +1,5 @@
 export interface ItemSquare {
-    index: number;
+    readonly  index: number;
+    indexNum: number;
     val: number;
 }
