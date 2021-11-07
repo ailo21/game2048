@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import SquareItem from "./SquareItem";
 import {ArrowEnum} from "../../type/ArrowEnum";
 import {Input} from 'antd'
-import {ItemSquare} from "../../type/ItemSquare";
+import {IItemSquare} from "../../type/IItemSquare";
 import {moveDown, moveLeft, moveRight, moveUp} from "../../util/arrayTools";
 import {Button} from 'antd';
 
 
 const Game2048 = () => {
-    const matrixDef: ItemSquare[] = [
+    const matrixDef: IItemSquare[] = [
         {index: 0, indexNum: 0, val: 0},
         {index: 1, indexNum: 1, val: 0},
         {index: 2, indexNum: 2, val: 0},
@@ -26,6 +26,7 @@ const Game2048 = () => {
         {index: 14,indexNum: 14, val: 0},
         {index: 15,indexNum: 15, val: 0}
     ];
+
     const [matrix, setMatrix] = useState(matrixDef);
     const [stepCount, setStepCount] = useState<number>(0);
     const inputEl = React.useRef(null);

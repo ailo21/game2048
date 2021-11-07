@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
-import {ItemSquare} from "../../type/ItemSquare";
+import {IItemSquare} from "../../type/IItemSquare";
 
 interface OperationBtnProps {
-    square: ItemSquare
+    square: IItemSquare
 }
 
 interface coordinate {
